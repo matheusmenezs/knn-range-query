@@ -1,18 +1,18 @@
 Implementar em C++
-1.Classe que será o objeto. (object) deverá conter a string que é o nome da imagem, e um vetor de double(a quantidade de dimensões é a mesma da quantidade de features extraídas) Zernike (72features)
 
-2.Após criar a classe object é necessário criar um vector de object para ler cada um desses pontos da base, e jogar dentro desse vector. 
+1. Criar uma classe que representará um objeto (Imagem). Essa classe deve conter uma string que armazena o nome da imagem e um vetor de double. O número de dimensões do vetor deve ser igual ao número de características (features) extraídas, que no caso são 72 características Zernike.
 
-3. Escolher de 3 a 5 imagens diferentes (classes diferentes) e rodar range query e knn
+2. Após criar a classe "Object", é necessário criar um vetor de "Object" para ler cada um dos pontos da base de dados e armazená-los dentro desse vetor.
 
-4. No knn a lista resposta começa vazia, enquanto ela for menor que o K, será knn, após o valor for maior que K, começa a comparar com os itens da lista e vai trocando aqueles que estão mais próximos de K 
+3. Escolha de 3 a 5 imagens diferentes de classes diferentes e execute tanto a consulta de faixa (range query) quanto o k-NN (k-nearest neighbors).
 
-5. Tanto range quanto knn, eu tenho que guardar a identificação da imagem e a distancia calculada no calculo da distancia euclidiana.
+4. No k-NN, a lista de resposta começa vazia. Enquanto ela tiver menos de K elementos, continue a busca. Quando a lista tiver K elementos, compare o próximo elemento com os itens da lista e substitua aqueles que estão mais próximos de K.
 
-Fazer para Zernike e depois repetir o processo para color layout.
+5. Tanto na consulta de faixa (range query) quanto no k-NN, você deve armazenar a identificação da imagem e a distância calculada no cálculo da distância euclidiana.
 
-O range deve retornar 10, 20, 30% da base. 
-No knn 10, 15, 20. 
+6. Realize o processo primeiro para as características Zernike e depois repita o mesmo processo para o Color Layout.
 
+Na consulta de faixa (range query), você pode optar por retornar 10%, 20% ou 30% da base de dados.
+No caso do k-NN, você pode escolher retornar os 10, 15 ou 20 vizinhos mais próximos.
 
-Após todo este processo será aplicado o método de redução de dimensionalidade. (Python) PCA.
+Após concluir todo esse processo, você pode aplicar o método de redução de dimensionalidade, como o PCA (Principal Component Analysis), em Python.

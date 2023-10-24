@@ -1,0 +1,18 @@
+Implementar em C++
+1.Classe que será o objeto. (object) deverá conter a string que é o nome da imagem, e um vetor de double(a quantidade de dimensões é a mesma da quantidade de features extraídas) Zernike (72features)
+
+2.Após criar a classe object é necessário criar um vector de object para ler cada um desses pontos da base, e jogar dentro desse vector. 
+
+3. Escolher de 3 a 5 imagens diferentes (classes diferentes) e rodar range query e knn
+
+4. No knn a lista resposta começa vazia, enquanto ela for menor que o K, será knn, após o valor for maior que K, começa a comparar com os itens da lista e vai trocando aqueles que estão mais próximos de K 
+
+5. Tanto range quanto knn, eu tenho que guardar a identificação da imagem e a distancia calculada no calculo da distancia euclidiana.
+
+Fazer para Zernike e depois repetir o processo para color layout.
+
+O range deve retornar 10, 20, 30% da base. 
+No knn 10, 15, 20. 
+
+
+Após todo este processo será aplicado o método de redução de dimensionalidade. (Python) PCA.

@@ -25,7 +25,7 @@ double euclideanDistance(const std::vector<double>& v1, const std::vector<double
     return std::sqrt(distance);
 }
 
-std::vector<Object> rangeQuery(std::vector<Object> dataset, std::vector<double>& queryImageFeatures, double range_threshold) {
+void rangeQuery(std::vector<Object> dataset, std::vector<double>& queryImageFeatures, double range_threshold) {
     std::vector<Object> range_results;
 
     auto start = std::chrono::high_resolution_clock::now(); // Inicia a contagem do tempo
@@ -40,16 +40,36 @@ std::vector<Object> rangeQuery(std::vector<Object> dataset, std::vector<double>&
     auto stop = std::chrono::high_resolution_clock::now();  // Marca o fim da execução
     std::chrono::duration<double> duration = std::chrono::duration_cast<std::chrono::duration<double>>(stop-start); // Calcula o tempo de execução em milissegundos
 
-    // Exibe os resultados da Range Query
-    std::cout << "Range:" << std::endl;
+    // Exibe os resultados da Range Query - Sem ordenação
+    // std::cout << "Range:" << std::endl;
+    // for (const Object& obj : range_results) {
+    //     std::cout << obj.name << "  " << obj.distance << std::endl;
+    // }
+
+    //std::cout << "Tempo: " << duration.count() << " ms" << std::endl;
+
+    //Ordena os resultados do range
+    std::sort(range_results.begin(), range_results.end(), [](const Object& a, const Object& b) { // Ordena os resultados por distância
+        return a.distance < b.distance; 
+    });
+    
+    // int numberObj = 0;
+    std::cout << "" << std::endl;
     for (const Object& obj : range_results) {
-        std::cout << obj.name << " " << obj.distance << std::endl;
+         std::cout << obj.name << " " << obj.distance << std::endl;
+    //     numberObj++;
+    //     if(numberObj == 100){
+    //          std::cout << "range------------->100" << std::endl;
+    //     }else if(numberObj == 200){
+    //         std::cout << "range------------->200" << std::endl;
+    //     }
+    //     else if(numberObj == 300){
+    //         std::cout << "range------------->300" << std::endl;
+    //     }
     }
+    //std::cout << "\nNumber images: " << numberObj << std::endl;
 
-    std::cout << "Tempo: " << duration.count() << " ms" << std::endl;
-
-    return range_results;
-
+    std::cout << "Tempo: " << duration.count() << "ms" << std::endl;
 }
 
 void knnQuery(std::vector<Object> dataset, std::vector<double>& queryImageFeatures, int k) {
@@ -73,7 +93,6 @@ void knnQuery(std::vector<Object> dataset, std::vector<double>& queryImageFeatur
             }
 
         /* Segundo modo de comparar para obter k-vizinhos mais próximos (Sem Ordenação)
-
             // Encontre o objeto com a maior distância atual entre os k-NN atuais
             double max_distance = 0;
             int max_index = -1;
@@ -99,17 +118,17 @@ void knnQuery(std::vector<Object> dataset, std::vector<double>& queryImageFeatur
     std::chrono::duration<double> duration = std::chrono::duration_cast<std::chrono::duration<double>>(stop-start); // Calcula o tempo de execução em milissegundos
 
     // Exibe os resultados do k-NN
-    std::cout << "k-NN:" << std::endl;
+     std::cout << "" << std::endl;
     for (const Object& obj : knn_results) {
-        std::cout << obj.name << "  " << obj.distance << std::endl;
+        std::cout << obj.name << " " << obj.distance << std::endl;
     }
     
-    std::cout << "Tempo: " << duration.count() << " ms" << std::endl;
+    std::cout << "Tempo: " << duration.count() << "ms" << std::endl;
 }
 
 int main() {
     // Nome do arquivo de características
-    std::string filename = "colors-result.txt";
+    std::string filename = "zernike-result.txt";
 
     std::ifstream file(filename);
     if (!file.is_open()) {
@@ -136,45 +155,17 @@ int main() {
         dataset.push_back(Object(imageName, features));
     }
 
-    int queryImageNumber = 589;
-    int kNeighbors = 10;
-    double rangeThreshold = 1.9;
-
+    int queryImageNumber = 317;
 
     std::vector<double>& queryImageFeatures = dataset[queryImageNumber].features; // Features da imagem de consulta
 
-    std::vector<Object> range_results = rangeQuery(dataset, queryImageFeatures, rangeThreshold);
+    rangeQuery(dataset, queryImageFeatures, 1.19264);
+    rangeQuery(dataset, queryImageFeatures, 1.29502);
+    rangeQuery(dataset, queryImageFeatures, 1.36795);
 
-    std::sort(range_results.begin(), range_results.end(), [](const Object& a, const Object& b) { // Ordena os resultados por distância
-        return a.distance < b.distance;
-    });
-
-    
-    std::cout << "\nRange Ordered:" << std::endl;
-    int numberObj = 0;
-    for (const Object& obj : range_results) {
-        std::cout << obj.name << " " << obj.distance << std::endl;
-        numberObj++;
-        if(numberObj == 100){
-            std::cout << "range------------->100" << std::endl;
-        }else if(numberObj ==200){
-            std::cout << "range------------->200" << std::endl;
-        }
-        else if(numberObj == 300){
-            std::cout << "range------------->300" << std::endl;
-        }
-    }
-
-    std::cout << "\nNumber images: " << numberObj << std::endl;
-
-
-    // knnQuery(dataset, queryImageFeatures, kNeighbors); 
-
-    // kNeighbors = 15;
-    // knnQuery(dataset, queryImageFeatures, kNeighbors); 
-
-    // kNeighbors = 20;
-    // knnQuery(dataset, queryImageFeatures, kNeighbors); 
+    //knnQuery(dataset, queryImageFeatures, 10); 
+    //knnQuery(dataset, queryImageFeatures, 15);
+    //knnQuery(dataset, queryImageFeatures, 20); 
 
     return 0;
 }

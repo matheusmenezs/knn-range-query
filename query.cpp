@@ -57,15 +57,15 @@ void rangeQuery(std::vector<Object> dataset, std::vector<double>& queryImageFeat
     std::cout << "" << std::endl;
     for (const Object& obj : range_results) {
          std::cout << obj.name << " " << obj.distance << std::endl;
-    //     numberObj++;
-    //     if(numberObj == 100){
-    //          std::cout << "range------------->100" << std::endl;
-    //     }else if(numberObj == 200){
-    //         std::cout << "range------------->200" << std::endl;
-    //     }
-    //     else if(numberObj == 300){
-    //         std::cout << "range------------->300" << std::endl;
-    //     }
+        //     numberObj++;
+        //     if(numberObj == 100){
+        //          std::cout << "range------------->100" << std::endl;
+        //     }else if(numberObj == 200){
+        //         std::cout << "range------------->200" << std::endl;
+        //     }
+        //     else if(numberObj == 300){
+        //         std::cout << "range------------->300" << std::endl;
+        //     }
     }
     //std::cout << "\nNumber images: " << numberObj << std::endl;
 
@@ -155,17 +155,17 @@ int main() {
         dataset.push_back(Object(imageName, features));
     }
 
-    int queryImageNumber = 317;
+    int queryImageNumber = 600;
 
     std::vector<double>& queryImageFeatures = dataset[queryImageNumber].features; // Features da imagem de consulta
 
-    rangeQuery(dataset, queryImageFeatures, 1.19264);
-    rangeQuery(dataset, queryImageFeatures, 1.29502);
-    rangeQuery(dataset, queryImageFeatures, 1.36795);
+    rangeQuery(dataset, queryImageFeatures, 0.452020);
+    rangeQuery(dataset, queryImageFeatures, 0.509368);
+    rangeQuery(dataset, queryImageFeatures, 0.557044);
 
-    //knnQuery(dataset, queryImageFeatures, 10); 
-    //knnQuery(dataset, queryImageFeatures, 15);
-    //knnQuery(dataset, queryImageFeatures, 20); 
+    // knnQuery(dataset, queryImageFeatures, 11); 
+    // knnQuery(dataset, queryImageFeatures, 16);
+    // knnQuery(dataset, queryImageFeatures, 21); 
 
     return 0;
 }

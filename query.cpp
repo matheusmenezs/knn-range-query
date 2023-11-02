@@ -145,16 +145,60 @@ void knnQuery(std::vector<Object> dataset, std::vector<double> &queryImageFeatur
         recall_result.push_back(recall);
     }
 
-    for (const double precision : precision_result)
-    {
-        std::cout << precision << " ";
+    // for (const double precision : precision_result) {
+    //     std::cout << precision << " ";
+    // }
+
+    // std::cout << std::endl;
+
+    // for (const double recall : recall_result) {
+    //     std::cout << recall << " ";
+    // }
+
+
+
+
+    // for (const double recall : recall_final){
+    //     double max_precision = 0.0;
+    //     double respective_recall = 0.0;
+    //     for (const double precision_at : precision_result){
+    //         for (const double recall_at : recall_result){
+    //             if(precision_at > max_precision && recall_at >= recall){
+    //                 max_precision = precision;
+    //                 respective_recall = recall_at;
+    //             }
+    //         }
+    //     }
+
+    // }
+
+
+    std::vector<double> recall_final = {0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0};
+    std::vector<double> interpolated_precision;
+    
+    double max_precision = 0.0;
+    double respective_recall = 0.0;
+
+    for (const double recall : recall_final){
+  std::cout << recall << " ";   
+
+        for (int i = 0; i < precision_result.size(); i++){
+              std::cout << recall << " ";  
+           //         std::cout << recall << " ";
+            //std::cout << precision_result[i] << " ";
+            //std::cout << recall_result[i] << " ";
+            if(precision_result[i] > max_precision && recall >= recall_result[i]){
+                max_precision = precision_result[i];
+            }
+            
+        }
+
+        interpolated_precision.push_back(max_precision);
+        //std::cout << "max: "<< max_precision << " ";
+        max_precision = 0.0;
+         
     }
 
-    std::cout << std::endl;
-
-    for (const double recall : recall_result) {
-        std::cout << recall << " ";
-    }
 
 
     // std::cout << "Tempo: " << duration.count() << "ms" << std::endl;
@@ -199,9 +243,9 @@ int main()
 
     int relevants = total_relevant;
     knnQuery(dataset, queryImageFeatures, relevants);
-    for(int i = 400; i < 500; i++){
-        knnQuery(dataset, dataset[i].features, 100);
-    }
+    // for(int i = 400; i < 500; i++){
+    //     knnQuery(dataset, dataset[i].features, 100);
+    // }
 
     // rangeQuery(dataset, queryImageFeatures, 0.452020);
     // rangeQuery(dataset, queryImageFeatures, 0.509368);

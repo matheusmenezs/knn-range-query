@@ -136,7 +136,7 @@ void knnQuery(std::vector<Object> dataset, std::vector<double>& queryImageFeatur
     
         total_retrieved++;
 
-        if(obj.numberObj >= 399 && obj.numberObj < 500){
+        if(obj.numberObj >= 400 && obj.numberObj < 500){
             total_true++;
         } 
 
@@ -199,15 +199,15 @@ int main() {
     std::vector<double>& queryImageFeatures = dataset[queryImageNumber].features; // Features da imagem de consulta
 
 
-    for(int i = 400; i < 500; i++){
-        knnQuery(dataset, dataset[i].features, 100);
-    }
+    // for(int i = 400; i < 500; i++){
+    //     knnQuery(dataset, dataset[i].features, 100);
+    // }
 
     // rangeQuery(dataset, queryImageFeatures, 0.452020);
     // rangeQuery(dataset, queryImageFeatures, 0.509368);
     // rangeQuery(dataset, queryImageFeatures, 0.557044);
 
-    // knnQuery(dataset, queryImageFeatures, 11); 
+     knnQuery(dataset, queryImageFeatures, 100); 
     // knnQuery(dataset, queryImageFeatures, 16);
     // knnQuery(dataset, queryImageFeatures, 21); 
 

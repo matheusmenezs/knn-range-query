@@ -77,10 +77,11 @@ void knnQuery(std::vector<Object> dataset, std::vector<double>& queryImageFeatur
     std::vector<Object> knn_results;
     
     auto start = std::chrono::high_resolution_clock::now(); // Inicia a contagem do tempo  
-
+    int numberObject = 0;
     for (Object& obj : dataset) {
         obj.distance = euclideanDistance(obj.features, queryImageFeatures); // Atualiza a distância no objeto
-        obj.numberObj = obj.numberObj + 1; 
+        obj.numberObj = numberObject; 
+        numberObject++;
 
         if (knn_results.size() < k) {
             knn_results.push_back(obj);
@@ -121,41 +122,45 @@ void knnQuery(std::vector<Object> dataset, std::vector<double>& queryImageFeatur
 
     // Exibe os resultados do k-NN
 
-    std::vector<double> array_precision[100];
-    std::vector<double> array_recall[100];
+    std::vector<double> array_precision;
+    std::vector<double> array_recall;
 
     int total_true = 0;
     int total_retrieved = 0;
 
 
     std::cout << "" << std::endl;
+    int i = 0;
     for (const Object& obj : knn_results) {
-        std::cout << obj.name << " " << obj.distance << std::endl;
-
+        //std::cout << obj.name << " " << obj.distance << std::endl;
+    
         total_retrieved++;
-        if(obj.numberObj >= 299 && obj.numberObj <= 399){
+
+        if(obj.numberObj >= 399 && obj.numberObj < 500){
             total_true++;
-            array_precision[obj.numberObj].push_back(total_true / total_retrieved);
-            array_recall[obj.numberObj].push_back(total_true / 100);
-        } else {
-            array_precision[obj.numberObj].push_back(total_true / total_retrieved);
-            array_recall[obj.numberObj].push_back(total_true / 100);
-        }
+        } 
+
+        double precision = static_cast<double> (total_true) / total_retrieved;
+        double recall = static_cast<double> (total_true) / 100;
+
+        array_precision.push_back(precision);
+        array_recall.push_back(recall);
     }
 
-    for (int i = 0 ; i < 100 ; i++){
-        std::cout << "Precision: ";
-        for (const auto& p : array_precision[i]) {
-            std::cout << p << " ";
-        }
-        std::cout << std::endl;
+     int count = 0 ;
+    // for (const double value : array_precision) {
+    //     std::cout << value<< std::endl;
+    //     std::cout << "count" << count<< std::endl;
+    //     count++;
+    // }
 
-        std::cout << "Recall: ";
-        for (const auto& r : array_recall[i]) {
-            std::cout << r << " ";
-        }
-        std::cout << std::endl;
+
+        for (const double value : array_recall) {
+        std::cout << value<< std::endl;
+        std::cout << "count" << count<< std::endl;
+        count++;
     }
+
 
     std::cout << "Tempo: " << duration.count() << "ms" << std::endl;
 }
@@ -189,18 +194,18 @@ int main() {
         dataset.push_back(Object(imageName, features));
     }
 
-    int queryImageNumber = 600;
+    int queryImageNumber = 488;
 
     std::vector<double>& queryImageFeatures = dataset[queryImageNumber].features; // Features da imagem de consulta
 
 
-    for(int i = 300; i < 400; i++){
+    for(int i = 400; i < 500; i++){
         knnQuery(dataset, dataset[i].features, 100);
     }
 
-    rangeQuery(dataset, queryImageFeatures, 0.452020);
-    rangeQuery(dataset, queryImageFeatures, 0.509368);
-    rangeQuery(dataset, queryImageFeatures, 0.557044);
+    // rangeQuery(dataset, queryImageFeatures, 0.452020);
+    // rangeQuery(dataset, queryImageFeatures, 0.509368);
+    // rangeQuery(dataset, queryImageFeatures, 0.557044);
 
     // knnQuery(dataset, queryImageFeatures, 11); 
     // knnQuery(dataset, queryImageFeatures, 16);

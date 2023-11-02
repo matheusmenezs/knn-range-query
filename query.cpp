@@ -12,8 +12,9 @@ public:
     std::string name;  // Nome da imagem
     std::vector<double> features;  // Vetor de características Zernike ou Color Layout
     double distance; // Variável para armazenar a distância
+    int numberObj;
 
-    Object(const std::string& n, const std::vector<double>& f) : name(n), features(f), distance(0.0) {}
+    Object(const std::string& n, const std::vector<double>& f) : name(n), features(f), distance(0.0), numberObj(0) {}
 };
 
 double euclideanDistance(const std::vector<double>& v1, const std::vector<double>& v2) {
@@ -79,6 +80,7 @@ void knnQuery(std::vector<Object> dataset, std::vector<double>& queryImageFeatur
 
     for (Object& obj : dataset) {
         obj.distance = euclideanDistance(obj.features, queryImageFeatures); // Atualiza a distância no objeto
+        obj.numberObj = obj.numberObj + 1; 
 
         if (knn_results.size() < k) {
             knn_results.push_back(obj);
@@ -118,11 +120,43 @@ void knnQuery(std::vector<Object> dataset, std::vector<double>& queryImageFeatur
     std::chrono::duration<double> duration = std::chrono::duration_cast<std::chrono::duration<double>>(stop-start); // Calcula o tempo de execução em milissegundos
 
     // Exibe os resultados do k-NN
-     std::cout << "" << std::endl;
+
+    std::vector<double> array_precision[100];
+    std::vector<double> array_recall[100];
+
+    int total_true = 0;
+    int total_retrieved = 0;
+
+
+    std::cout << "" << std::endl;
     for (const Object& obj : knn_results) {
         std::cout << obj.name << " " << obj.distance << std::endl;
+
+        total_retrieved++;
+        if(obj.numberObj >= 299 && obj.numberObj <= 399){
+            total_true++;
+            array_precision[obj.numberObj].push_back(total_true / total_retrieved);
+            array_recall[obj.numberObj].push_back(total_true / 100);
+        } else {
+            array_precision[obj.numberObj].push_back(total_true / total_retrieved);
+            array_recall[obj.numberObj].push_back(total_true / 100);
+        }
     }
-    
+
+    for (int i = 0 ; i < 100 ; i++){
+        std::cout << "Precision: ";
+        for (const auto& p : array_precision[i]) {
+            std::cout << p << " ";
+        }
+        std::cout << std::endl;
+
+        std::cout << "Recall: ";
+        for (const auto& r : array_recall[i]) {
+            std::cout << r << " ";
+        }
+        std::cout << std::endl;
+    }
+
     std::cout << "Tempo: " << duration.count() << "ms" << std::endl;
 }
 
@@ -158,6 +192,11 @@ int main() {
     int queryImageNumber = 600;
 
     std::vector<double>& queryImageFeatures = dataset[queryImageNumber].features; // Features da imagem de consulta
+
+
+    for(int i = 300; i < 400; i++){
+        knnQuery(dataset, dataset[i].features, 100);
+    }
 
     rangeQuery(dataset, queryImageFeatures, 0.452020);
     rangeQuery(dataset, queryImageFeatures, 0.509368);

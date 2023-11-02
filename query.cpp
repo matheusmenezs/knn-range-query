@@ -6,8 +6,8 @@
 #include <chrono>
 #include <algorithm>
 #include <cmath>
-#define extractor_type "zernike-result.txt" //OR: colors-result.txt
-#define image_number 488 //OR: 317, 589, 600
+#define extractor_type "zernike-result.txt" // OR: colors-result.txt
+#define image_number 488                    // OR: 317, 589, 600
 #define relevant_images 100
 #define first_image 400
 #define final_image 499
@@ -87,10 +87,11 @@ std::vector<double> calculateInterpolatedPrecision(
         interpolated_precision.push_back(max_precision);
     }
 
-    for (const double precision : interpolated_precision)
-    {
-        std::cout << precision << " ";
-    }
+    // for (const double precision : interpolated_precision)
+    // {
+    //     std::cout << precision << " ";
+    // }
+    //std::cout << "" << std::endl;
 
     return interpolated_precision;
 }
@@ -146,11 +147,11 @@ void rangeQuery(std::vector<Object> dataset, std::vector<double> &queryImageFeat
     // std::cout << "Tempo: " << duration.count() << "ms" << std::endl;
 }
 
-void knnQuery(std::vector<Object> dataset, std::vector<double> &queryImageFeatures, int k)
+std::vector<double> knnQuery(std::vector<Object> dataset, std::vector<double> &queryImageFeatures, int k)
 {
     std::vector<Object> knn_results;
 
-    //auto start = std::chrono::high_resolution_clock::now(); // Inicia a contagem do tempo
+    // auto start = std::chrono::high_resolution_clock::now(); // Inicia a contagem do tempo
     int numberObject = 0;
     for (Object &obj : dataset)
     {
@@ -176,8 +177,8 @@ void knnQuery(std::vector<Object> dataset, std::vector<double> &queryImageFeatur
         }
     }
 
-    //auto stop = std::chrono::high_resolution_clock::now();                                                            // Marca o fim da execução
-    //std::chrono::duration<double> duration = std::chrono::duration_cast<std::chrono::duration<double>>(stop - start); // Calcula o tempo de execução em milissegundos
+    // auto stop = std::chrono::high_resolution_clock::now();                                                            // Marca o fim da execução
+    // std::chrono::duration<double> duration = std::chrono::duration_cast<std::chrono::duration<double>>(stop - start); // Calcula o tempo de execução em milissegundos
 
     // ******* Exibe os resultados do k-NN *******
     // std::cout << "" << std::endl;
@@ -190,11 +191,11 @@ void knnQuery(std::vector<Object> dataset, std::vector<double> &queryImageFeatur
     //     std::cout << recall << " ";
     // }
 
-    std::cout << "" << std::endl;
     std::pair<std::vector<double>, std::vector<double>> result = calculatePrecisionAndRecall(knn_results);
     std::vector<double> interpolated_precision = calculateInterpolatedPrecision(result.first, result.second);
-
     // std::cout << "Tempo: " << duration.count() << "ms" << std::endl;
+
+    return interpolated_precision;
 }
 
 int main()
@@ -223,7 +224,7 @@ int main()
 
         std::vector<double> features;
         while (iss >> featureValue)
-        {   // Leitura dos valores das características (demais posições)
+        { // Leitura dos valores das características (demais posições)
             features.push_back(featureValue);
         }
 
@@ -247,9 +248,24 @@ int main()
 
     // knnQuery(dataset, queryImageFeatures, total_relevant);
 
+    std::vector<double> averagePrecision(11, 0.0);
+    std::vector<double> sumPrecision(11, 0.0);
+
     for (int i = image_initial; i <= image_final; i++)
     {
-        knnQuery(dataset, dataset[i].features, total_relevant);
+        std::vector<double> interpolatedPrecision = knnQuery(dataset, dataset[i].features, total_relevant);
+
+        for (int j = 0; j < interpolatedPrecision.size(); j++)
+        {
+            sumPrecision[j] += interpolatedPrecision[j];
+        }
+    }
+
+    //Calcula e média da precisão interpolada
+    std::cout << "Média da precisão interpolada:"<< std::endl;
+    for (int k = 0; k < sumPrecision.size(); k++)
+    {
+        std::cout << sumPrecision[k]/relevant_images << std::endl;
     }
 
     return 0;

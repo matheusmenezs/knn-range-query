@@ -7,7 +7,7 @@
 #include <algorithm>
 #include <cmath>
 #define extractor_type "colors-result.txt" // OR: colors-result.txt
-#define image_number 600                   // OR: 317, 589, 600
+#define image_number 600                   // OR: 488, 317, 589, 600
 #define relevant_images 100
 #define first_image 600
 #define final_image 699
@@ -125,17 +125,12 @@ void rangeQuery(std::vector<Object> dataset, std::vector<double> &queryImageFeat
     auto stop = std::chrono::high_resolution_clock::now();                                                            // Marca o fim da execução
     std::chrono::duration<double> duration = std::chrono::duration_cast<std::chrono::duration<double>>(stop - start); // Calcula o tempo de execução em milissegundos
 
-    // ----- Exibe os resultados da Range Query - Sem ordenação -----
-    // std::cout << "Range:" << std::endl;
-    // for (const Object& obj : range_results) {
-    //     std::cout << obj.name << "  " << obj.distance << std::endl;
-    // };
-
     // Ordena os resultados do range
     std::sort(range_results.begin(), range_results.end(), [](const Object &a, const Object &b) { // Ordena os resultados por distância
         return a.distance < b.distance;
     });
 
+    // ----- Exibe os resultados do Range Query -----
     // int numberObj = 0;
     std::cout << "" << std::endl;
     for (const Object &obj : range_results)
@@ -151,7 +146,7 @@ void rangeQuery(std::vector<Object> dataset, std::vector<double> &queryImageFeat
         //         std::cout << "range------------->300" << std::endl;
         //     }
     }
-    // std::cout << "\nNumber images: " << numberObj << std::endl;
+    // std::cout << "\Quantity images: " << numberObj << std::endl;
     // std::cout << "Tempo: " << duration.count() << "ms" << std::endl;
 }
 
@@ -245,11 +240,11 @@ int main()
     // rangeQuery(dataset, queryImageFeatures, 0.452020);
     // rangeQuery(dataset, queryImageFeatures, 0.509368);
     // rangeQuery(dataset, queryImageFeatures, 0.557044);
-
     // knnQuery(dataset, queryImageFeatures, 10);
     // knnQuery(dataset, queryImageFeatures, 15);
     // knnQuery(dataset, queryImageFeatures, 20);
 
+    // ----- Calcula e exibe os resultados da média da precisão interpolada -----
     std::vector<double> averagePrecision(11, 0.0);
     std::vector<double> sumPrecision(11, 0.0);
 
